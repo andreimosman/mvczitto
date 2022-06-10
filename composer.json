@@ -1,0 +1,19 @@
+{
+    "name": "andreimosman/mvczitto",
+    "description": "Very small MVC frameworking using filesystem routing.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "MVCzitto\\": "src/MVCzitto"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrei de Oliveira Mosman"
+        }
+    ],
+    "require": {
+        "php": ">=7.4.0"
+    }
+}
