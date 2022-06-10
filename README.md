@@ -3,10 +3,13 @@
 This is a very small MVC framework for PHP that uses filesystem routing for controllers and views.
 
 
-The idea behing this is to write php code using PHP as pure as possible, but providing some patterns and organization.
+The idea behing this is to write code using PHP as pure as possible, but providing some patterns and organization.
 
+Two things motivated me to do it:
+ - The nextjs routing
+ - Rasmus Lerdorf "PHP Frameworks all suck" phrase =)
 
-
+ 
 ## HOWTO
 
 
