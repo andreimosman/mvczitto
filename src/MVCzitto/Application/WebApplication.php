@@ -71,44 +71,67 @@ class WebApplication extends Application
 
     }
 
-    public function redirectTo($url): void
+    public function redirectTo($url, $params = []): void
     {
+        if( is_countable($params) && count($params) > 0 )
+        {
+            $url .= "?" . http_build_query($params);
+        }
         header("Location: $url");
         exit;
     }
 
 
+    public function redirectToLogin($params = [])
+    {
+     
+        $route = $this->router->getRouteFor( $this->getLoginRoutePath() );
+            
+        if( $route == null )
+        {
+            $this->accessDenied();
+            return;
+        }
+
+        $redirectTarget = $route->getRoute();
+
+        $this->redirectTo($redirectTarget, $params);
+        return;
+
+    }
+
     public function run()
     {
 
-        DependencyInjector::getInstance()->set('auth', Authentication::getInstance()); // Generic authentication
+        DependencyInjector::getInstance()->auth = Authentication::getInstance(); // Generic authentication
 
         $verb = strtolower($_SERVER['REQUEST_METHOD']);
-        $auth = Authentication::getInstance()->isAuthenticated() ? 'authenticated' : 'open';
+        $authRouteInfo = Authentication::getInstance()->isAuthenticated() ? 'authenticated' : 'open';
 
-        $route = $this->router->getRouteFor($this->getUriPath(), $verb, $auth);
+        $route = $this->router->getRouteFor($this->getUriPath(), $verb, $authRouteInfo);
 
         if( $route === null ) {
             // Probably session has expired
-            if( $auth == "open" && !($route = $this->router->getRouteFor($this->getUriPath(), $verb, 'authenticated'))) {
+            if( $authRouteInfo == "open" && !($route = $this->router->getRouteFor($this->getUriPath(), $verb, 'authenticated'))) {
                 $this->notFound();
                 return;                    
+            }
+
+            // Some error happening after the user authentication (redirect probably didn't work)
+            if( $authRouteInfo == "authenticated" && !$route )
+            {
+                $this->redirectTo("/");
+                return;
             }
             
         }
         
         if( $route->getOptions()?->authentication?->required && Authentication::getInstance()->isAuthenticated() === false ) {
-            $route = $this->router->getRouteFor( $this->getLoginRoutePath());
-            
-            if( $route == null )
-            {
-                $this->accessDenied();
-                return;
-            }
-
-            $this->redirectTo($route->getRoute());
+            $this->redirectToLogin([
+                'notification_type' => 'info',
+                'notification_message' => 'Session has expired. Please login again.',
+            ]);
             return;
-
         }
 
         $controller = $route->getController();
