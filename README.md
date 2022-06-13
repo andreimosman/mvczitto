@@ -1,53 +1,90 @@
 # MVCzitto
 
-This is a very small MVC framework for PHP that uses filesystem routing for controllers and views.
+MVCzitto is a framework for PHP that allows you to build web applications in a simple and easy way.
 
+Instead of traditional OO Based MVC, we decided to implement MVC using File System Routing. 
 
 The idea behing this is to write code using PHP as pure as possible, but providing some patterns and organization.
 
 Two things motivated me to do it:
  - The nextjs routing
- - Rasmus Lerdorf "PHP Frameworks all suck" phrase =)
+ - Rasmus Lerdorf said "PHP Frameworks all suck". I'm trying to create this fremework as less frameworky as possible.
 
- 
 ## HOWTO
 
 
-# Add via composer
+### Add via composer
 
 ```
-composer require andreimosman/mvczitto
+composer create-project andreimosman/mvczitto foldername
 ```
 
-# Create your app structure such as:
+Please refer to the [Composer](https://getcomposer.org/) website for instructions on how to install it on your platform if you don't have it.
+Alternatively, you may also download Frameworkitto from the [releases page](https://github.com/andreimosman/frameworkitto/releases) and export it to your project's main folder.
+
+### Docker development environment
+
+At the folder `docker-dev-environment` you can call `firstrun.sh` to create the development environment using docker compose.
+
+Please refer to the [Docker](https://www.docker.com/get-started) website for instructions on how to install it on your platform if you don't have it.
+
+## Getting Started with MVCzitto
+
+### The app folder contain more instructions and also few samples
 
 ```
+app
+├── index.php (entry point - where de dependency injection is done)
+├── config.php (configuration file)
+├── assets
+│   ├── css
+│   │   └── style.css
+│   └── images
+│       └── logo-mvczitto.png
 ├── controllers
-│   ├── authenticated
-│   │   ├── dashboard
-│   │   │   └── index.php
-│   │   └── user
-│   │       ├── @(post)new.php
-│   │       ├── edit
-│   │       │   ├── @(put,patch)[id].php
-│   │       │   └── [id].php
-│   │       ├── logout.php
-│   │       ├── new.php
-│   │       └── profile.php
-│   └── open
-│       ├── index.php
-│       └── user
-│           ├── index.php
-│           └── login.php
-├── index.php
-└── views
+│   ├── authenticated (controllers that require authentication)
+│   │   ├── dashboard
+│   │   │   └── index.php
+│   │   ├── index.php
+│   │   └── user
+│   │       ├── @(post)new.php
+│   │       ├── edit
+│   │       │   ├── @(put,patch)[id].php
+│   │       │   └── [id].php
+│   │       ├── logout.php
+│   │       ├── new.php
+│   │       └── profile.php
+│   └── open (controllers that don't require authentication)
+│       ├── gettingstarted
+│       │   └── index.php
+│       ├── index.php
+│       └── user
+│           ├── @(post)forgotpassword.php
+│           ├── @(post)login.php
+│           ├── @(post)signup.php
+│           ├── forgotpassword.php
+│           ├── index.php
+│           ├── login.php
+│           └── signup.php
+└── views (follows the same pattern as controllers)
+    ├── authenticated
+    │   ├── footer.php
+    │   ├── header.php
+    │   └── user
+    │       └── edit
+    │           └── [id].php
     └── open
+        ├── footer.php
+        ├── gettingstarted
+        │   └── index.php
+        ├── header.php
         └── user
-            └── login.php
+            ├── forgotpassword.php
+            ├── login.php
+            └── signup.php
 ```
 
-### Verbs
-
+### Routing verbs
 
 The verb set by default is ``GET`` but you can specify the verb at the begining of the filename inside ``@()``, such as ``@(post)new.php``
 
@@ -69,35 +106,9 @@ By doing this ```$auth->isAuthenticated()``` will return true;
 
 You can logout by calling ```$auth->unsetAuthenticationData()```
 
+Check `app/controllers/open/user/@(post)login.php` and `app/controllers/authenticated/user/logout.php
+
 ### The main index.php
 
-To test you can use the code bellow:
-```
-<?php
+`app/index.php` contains the entry point of the application and the dependency injector.
 
-require_once("./vendor/autoload.php");
-
-use MVCzitto\Routing\Router;
-use MVCzitto\DependencyInjector;
-use MVCzitto\Application\WebApplication;
-use MVCzitto\View\View;
-
-$di = DependencyInjector::getInstance();
-
-$viewsFolder = "views";
-$di->set("view", View::getInstance($viewsFolder) );
-
-$controllersFolder = "controllers";
-$di->set("router", Router::getFilesystemRouter($controllersFolder) );
-
-$app = WebApplication::getInstance();
-$di->set("app", $app);
-
-$app->setLoginRoutePath('/user/login');
-$app->run();
-
-```
-
-###
-
-*** TO FINISH ***
