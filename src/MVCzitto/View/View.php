@@ -28,6 +28,13 @@ class View extends Component
         $this->vars[$name] = $value;
     }
 
+    public function assignAllVariablesInArray(array $array)
+    {
+        foreach ($array as $key => $value) {
+            $this->assign($key, $value);
+        }
+    }
+
     public function getSuggestedTemplate() {
 
         if( $this->route === null ) return null;
