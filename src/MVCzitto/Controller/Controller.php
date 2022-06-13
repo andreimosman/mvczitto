@@ -41,7 +41,7 @@ class Controller extends Component
     public function run()
     {
         DependencyInjector::getInstance()->set('route', $this->adapter);
-        $r = $this->adapter->executable()->call($this);
+        $r = $this->adapter->executable()->call($this, DependencyInjector::getInstance()->getContainer());
         DependencyInjector::getInstance()->set('route', null);
     }
 
