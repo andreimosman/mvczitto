@@ -29,8 +29,10 @@ class Route extends BaseRoute
     public function executable(): \Closure
     {
         $target = $this->getTarget();
+        $_ROUTE = $this->getVariables();
         return \Closure::fromCallable(
-            function () use($target) {
+            function (mixed $varsToGlobalize = []) use($target,$_ROUTE) {
+                extract($varsToGlobalize);
                 include($target);
             }
         );
