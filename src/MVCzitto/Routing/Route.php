@@ -10,6 +10,7 @@ use \MVCzitto\Routing\Route as BaseRoute;
 class Route implements ControllerAdapter
 {
     private $verb, $auth, $route, $target, $options, $regex;
+    private $variables;
     private $hasRegex = true;
 
     protected function __construct($verb, $auth, $route, $target, $options = [])
@@ -19,6 +20,7 @@ class Route implements ControllerAdapter
         $this->route = $route;
         $this->target = $target;
         $this->options = $options;
+        $this->variables = [];
     }
 
     public static function create($verb, $auth, $route, $target, $options = []): Route
@@ -44,6 +46,11 @@ class Route implements ControllerAdapter
     public function getTarget(): string
     {
         return $this->target;
+    }
+
+    public function getVariables(): array
+    {
+        return $this->variables;
     }
 
     public function getOptions(): ?object
@@ -72,6 +79,24 @@ class Route implements ControllerAdapter
 
     }
 
+    public function insertVariableValuesFromList($values)
+    {
+        if( !is_countable($values) ) return;
+        
+        $options = $this->getOptions();
+        if( !$options->variables || !is_countable($options->variables) ) return;
+
+        for($i=0;$i<count($this->options->variables);$i++)
+        {
+            if( isset($values[$i]) )
+            {
+                $this->variables[$this->options->variables[$i]] = $values[$i];
+            }
+
+        }
+
+    }
+
     public function getSuggestedTemplate() 
     {
         return "/" . $this->getAuth() . "/" . $this->getRoute();
@@ -80,8 +105,8 @@ class Route implements ControllerAdapter
     public function executable(): \Closure
     {
         return \Closure::fromCallable(
-            function () {
-                // Dummy
+            function (mixed $varsToGlobalize = []) {
+                throw new BadMethodCallException('Not Implemented');
             }
         );
     }
