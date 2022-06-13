@@ -21,6 +21,11 @@ class DependencyInjector
         return static::$instance;
     }
 
+    public function getContainer(): array
+    {
+        return $this->container;
+    }
+
     public function set($key, $value)
     {
         $this->container[$key] = $value;
@@ -34,6 +39,11 @@ class DependencyInjector
     public function __get($key) : mixed
     {
         return $this->get($key);
+    }
+
+    public function __set($key, $value)
+    {
+        $this->set($key, $value);
     }
 
 
