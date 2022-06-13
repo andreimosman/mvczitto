@@ -1,4 +1,6 @@
 # MVCzitto
+[![Latest Stable Version](https://img.shields.io/packagist/v/andreimosman/mvczitto.svg?style=flat-square)](https://packagist.org/packages/andreimosman/mvczitto)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-8892BF.svg?style=flat-square)](https://php.net/)
 
 MVCzitto is a framework for PHP that allows you to build web applications in a simple and easy way.
 
