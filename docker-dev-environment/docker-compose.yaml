@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: php.Dockerfile
+    container_name: mvczitto-app
+    working_dir: /mvczitto/app
+    volumes:
+      - ../:/mvczitto
+  nginx:
+    image: nginx
+    container_name: mvczitto-nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ../:/mvczitto
+      - ./config/nginx:/etc/nginx/conf.d  
