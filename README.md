@@ -106,7 +106,7 @@ By doing this ```$auth->isAuthenticated()``` will return true;
 
 You can logout by calling ```$auth->unsetAuthenticationData()```
 
-Check `app/controllers/open/user/@(post)login.php` and `app/controllers/authenticated/user/logout.php
+Check `app/controllers/open/user/@(post)login.php` and `app/controllers/authenticated/user/logout.php`
 
 ### The main index.php
 
