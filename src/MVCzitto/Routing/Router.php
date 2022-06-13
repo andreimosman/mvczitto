@@ -33,15 +33,25 @@ class Router
         $regex = $route->getRegularExpression();
         $this->routes[] = $route;
 
+        $routeSignature = $route->getVerb() . "@" . $route->getRoute();
+
         if( $regex ) 
         {
-            $this->regexRoutes[$route->getAuth()][] = $route;
+            $this->regexRoutes[$route->getAuth()][$routeSignature] = $route;
         }
         else
         {
-            $this->staticRoutes[$route->getAuth()][$route->getVerb() . "@" . $route->getRoute()] = $route;
+            $this->staticRoutes[$route->getAuth()][$routeSignature] = $route;
         }
         
+    }
+
+    public static function normalizeUri(string $uri): string
+    {
+        $normalizedUri = strtolower($uri);
+        $normalizedUri = str_replace("../", "/", $normalizedUri);
+        $normalizedUri = preg_replace("/[\/]+/", "/", $normalizedUri);
+        return $normalizedUri;
     }
 
     public function getStaticRouteFor($uri, $verb = 'get', $auth = 'open'): ?Route
@@ -54,17 +64,24 @@ class Router
 
     }
 
+
     public function getRegexRouteFor($uri, $verb = 'get', $auth = 'open'): ?Route
     {
 
         $data = $verb . '@' . $uri;
 
-        foreach($this->regexRoutes[$auth] as $route)
+        foreach($this->regexRoutes[$auth] as $routeSignature => $route)
         {
-            $regex = "/" . $verb . '@' . $route->getRegularExpression() . "/";
+            $regex = "/" .$route->getVerb() . '@' . $route->getRegularExpression() . "(\/index)*\$/";
 
             if( preg_match($regex, $data, $matches) )
             {
+                $variableValues = array_slice($matches, 1);
+                // if last element is /index remove it
+                if( $variableValues[count($variableValues) - 1] == "/index" ) array_pop($variableValues);
+
+                $route->insertVariableValuesFromList($variableValues);
+
                 return $route;
             }
         
@@ -79,7 +96,6 @@ class Router
         $uri = trim($uri);
 
         $route = $this->getStaticRouteFor($uri,$verb, $auth);
-        if( !$route ) $this->getStaticRouteFor($uri . "/index", $verb, $auth) ;
         if( !$route ) return $this->getRegexRouteFor($uri, $verb, $auth);
 
         return $route;
