@@ -104,11 +104,22 @@ class Router extends BaseRouter
             
         }
 
+
+        $lastPartOfTheRoute = @$part == "index";
+
         if( count($variables) > 0 ) $options["variables"] = $variables;
 
         foreach($verbs as $verb)
         { 
             $this->addRoute(Route::create($verb, $auth, $route, $target, $options));
+
+            if( $lastPartOfTheRoute == "index" && !count($variables) )
+            {
+                $route = substr($route, 0, -6);
+                if( !$route ) $route = "/";
+                $this->addRoute(Route::create($verb, $auth, $route, $target, $options));
+            }
+
         }
     }
 
