@@ -13,10 +13,8 @@
 $email = @$_REQUEST['email'];
 $password = @$_REQUEST['password'];
 
-$usersModel = $models->users;
 // $usersModel = $models->get('users');
-// print_r($usersModel);
-
+$usersModel = $models->users;
 $user = $usersModel->read(['email' => $email]);
 
 if( $user )
