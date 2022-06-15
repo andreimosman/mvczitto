@@ -4,6 +4,7 @@ namespace MVCzitto\Controller;
 
 use MVCzitto\Base\Component;
 use MVCzitto\DependencyInjector;
+use MVCzitto\Model\Model;
 
 class Controller extends Component
 {
@@ -40,6 +41,7 @@ class Controller extends Component
 
     public function run()
     {
+
         DependencyInjector::getInstance()->set('route', $this->adapter);
         $r = $this->adapter->executable()->call($this, DependencyInjector::getInstance()->getContainer());
         DependencyInjector::getInstance()->set('route', null);
