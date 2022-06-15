@@ -68,6 +68,12 @@ app
 │           ├── index.php
 │           ├── login.php
 │           └── signup.php
+├── models (filesystem base models)
+│   └── users
+│       ├── create.php
+│       ├── delete.php
+│       ├── read.php
+│       └── update.php
 └── views (follows the same pattern as controllers)
     ├── authenticated
     │   ├── footer.php
@@ -109,6 +115,25 @@ By doing this ```$auth->isAuthenticated()``` will return true;
 You can logout by calling ```$auth->unsetAuthenticationData()```
 
 Check `app/controllers/open/user/@(post)login.php` and `app/controllers/authenticated/user/logout.php`
+
+### File system models
+
+```
+├── models
+    └── users
+        ├── create.php
+        ├── delete.php
+        ├── read.php
+        └── update.php
+```
+To access then on controllers you can just call `$models->nameOfTheController`. Check `app/controllers/open/user/@(post)login.php`:
+
+```
+$usersModel = $models->users; // Load the model
+$user = $usersModel->read(['email' => $email]); // Find the user
+```
+
+It executes the snippet located at `app/models/users/read.php`.
 
 ### The main index.php
 
