@@ -13,26 +13,22 @@
 $email = @$_REQUEST['email'];
 $password = @$_REQUEST['password'];
 
-if( $email == 'test@test.com' && $password == '1234' )
+$usersModel = $models->users;
+// $usersModel = $models->get('users');
+// print_r($usersModel);
+
+$user = $usersModel->read(['email' => $email]);
+
+if( $user )
 {
-    // This is just a sample, you can use any kind of authentication system.
-    // You can get this data from database, for example.
-    $data = [
-        'id' => 1,
-        'email' => $email,
-    ];
+    if( password_verify($password, $user['password']) )
+    {
+        unset($user['password']); // Do not store password hash in session.
+        $auth->setAuthenticationData($user);
+        $app->redirectTo('/');
+        return;
+    }
 
-    /**
-     * $auth is an instance of MVCzitto\Application\Authentication.
-     */
-
-    // Save the data in the session -> by doing this the user will be reconized as authenticated by the routing system.
-    $auth->setAuthenticationData($data);
-
-    $app->redirectTo('/');
-
-    return;
-    
 }
 
 /**
