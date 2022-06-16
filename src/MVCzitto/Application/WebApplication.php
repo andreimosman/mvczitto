@@ -20,7 +20,7 @@ class WebApplication extends Application
 
     protected function getUriPath() 
     {
-        $parts = parse_url($_SERVER['REQUEST_URI']);
+        $parts = parse_url(preg_replace('/[\/]+/','/',$_SERVER['REQUEST_URI']));
         return(isset($parts['path']) ? $parts['path'] : '/');
     }
 
@@ -40,6 +40,7 @@ class WebApplication extends Application
 
     protected function init()
     {
+        $this->bootstrapFoldersToRead[] = 'web';
         $this->rebuildVars();
         $this->startSession();
     }
