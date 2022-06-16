@@ -14,7 +14,7 @@ $email = @$_REQUEST['email'];
 $password = @$_REQUEST['password'];
 
 // $usersModel = $models->get('users');
-$usersModel = $models->users;
+$usersModel = $MVCzitto->models->users;
 $user = $usersModel->read(['email' => $email]);
 
 if( $user )
@@ -22,8 +22,8 @@ if( $user )
     if( password_verify($password, $user['password']) )
     {
         unset($user['password']); // Do not store password hash in session.
-        $auth->setAuthenticationData($user);
-        $app->redirectTo('/');
+        $MVCzitto->auth->setAuthenticationData($user);
+        $MVCzitto->app->redirectTo('/');
         return;
     }
 

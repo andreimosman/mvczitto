@@ -16,5 +16,5 @@ if( $email )
     
 }
 
-$app->redirectTo('/user/forgotpassword', $params);
+$MVCzitto->app->redirectTo('/user/forgotpassword', $params);
 

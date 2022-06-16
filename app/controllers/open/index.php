@@ -4,4 +4,4 @@
  * Just redirect to gettingstarted page
  */
 
-$app->redirectTo('/gettingstarted');
+$MVCzitto->app->redirectTo('/gettingstarted');

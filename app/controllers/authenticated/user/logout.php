@@ -2,8 +2,8 @@
 
 // Just unset the user authentication data and redirect to login page.
 
-$auth->unsetAuthenticationData();
-$app->redirectToLogin([
+$MVCzitto->auth->unsetAuthenticationData();
+$MVCzitto->app->redirectToLogin([
     'notification_type' => 'info',
     'notification_message' => 'Session closed.',
 ]);

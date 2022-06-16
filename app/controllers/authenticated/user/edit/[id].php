@@ -4,6 +4,8 @@
 
 $id = $_ROUTE['id'];
 
+$view = $MVCzitto->view;
+
 $view->assign('id', $id);
 
 $view->display('authenticated/header');

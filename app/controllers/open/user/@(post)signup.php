@@ -5,5 +5,5 @@ $params = [
     'notification_message' => 'Your account has been created...',
 ];
 
-$app->redirectTo('/user/login', $params);
+$MVCzitto->app->redirectTo('/user/login', $params);
 
