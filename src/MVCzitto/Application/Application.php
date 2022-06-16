@@ -9,14 +9,55 @@ class Application extends Component
 {
     protected static $instance;
 
+    protected $mainBootstrapFolder = 'bootstrap';
+    protected $bootstrapFoldersToRead = ['common'];
+
     protected function __construct()
     {
+
+        DependencyInjector::getInstance()->app = $this;
         $this->init();
+
     }
 
     protected function init()
     {
     
+    }
+
+    public function readBootstrapFolders()
+    {
+
+        foreach ($this->bootstrapFoldersToRead as $folder) {
+            $MVCzitto = DependencyInjector::getInstance();
+
+            $folderName = $this->mainBootstrapFolder . '/' . $folder;
+            $files = scandir($folderName);
+            foreach ($files as $file) {
+                $fileName = $folderName . '/' . $file;
+                if (is_file($fileName)) {
+                    $info = pathinfo($fileName);
+                    if( $info['extension'] == 'php' ) {
+                        $bootstrap = include $fileName;
+                        DependencyInjector::getInstance()->set($info['filename'], $bootstrap);
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    public function bootstrap($mainBootstrapFolder = null)
+    {
+
+        if( $mainBootstrapFolder !== null ) {
+            $this->mainBootstrapFolder = $mainBootstrapFolder;
+        } else {
+            $this->mainBootstrapFolder = DependencyInjector::getInstance()->config->app->paths->bootstrap ?? 'bootstrap';
+        }
+
+        $this->readBootstrapFolders();
     }
 
     public static function getInstance(?DependencyInjector $di = null): Application
