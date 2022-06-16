@@ -43,8 +43,9 @@ class Controller extends Component
     {
 
         DependencyInjector::getInstance()->set('route', $this->adapter);
-        $r = $this->adapter->executable()->call($this, DependencyInjector::getInstance()->getContainer());
+        $r = $this->adapter->executable()->call($this, ['MVCzitto' => DependencyInjector::getInstance()] );
         DependencyInjector::getInstance()->set('route', null);
+        
     }
 
 }
