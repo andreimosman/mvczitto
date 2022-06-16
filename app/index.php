@@ -2,33 +2,21 @@
 
 require_once("../vendor/autoload.php");
 
-ini_set('display_errors', 1);
-
-use MVCzitto\Routing\Router;
+use MVCzitto\Config\Config;
 use MVCzitto\DependencyInjector;
 use MVCzitto\Application\WebApplication;
-use MVCzitto\View\View;
-use MVCzitto\Model\ModelFactory;
 
-$_CONFIG = include('config.php');
-$_CONFIG['BASE_URL'] ?: (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . "/" . substr(dirname($_SERVER['DOCUMENT_URI']),1);
-define('BASE_URL', $_CONFIG['BASE_URL']);
+define('ENVIRONMENT', 'development');
+ENVIRONMENT == 'development' ?? ini_set('display_errors', 1);
 
-$di = DependencyInjector::getInstance();
+define('APP_PATH', __DIR__);
+$config = Config::loadFromFolder(APP_PATH.'/config');
+$uriFolder = trim( substr(dirname($_SERVER['DOCUMENT_URI']),1) );
 
-$viewsFolder = "views";
-$di->view = View::getInstance($viewsFolder);
-
-$controllersFolder = "controllers";
-$di->router = Router::getFilesystemRouter($controllersFolder);
-
-$modelsFolder = "models";
-$di->models = ModelFactory::getInstance($modelsFolder);
-
+$config->app->baseurl = $config->app->baseurl ?: (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . ($uriFolder ? '/' . $uriFolder : '');
+define('BASE_URL', $config->app->baseurl);
 
 $app = WebApplication::getInstance();
-$di->app = $app;
-
-$app->setLoginRoutePath('/user/login');
-
+$app->bootstrap();
+$app->setLoginRoutePath('/user/login'); // <-- todo: put at config
 $app->run();
