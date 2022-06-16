@@ -45,11 +45,9 @@ class Model extends Component
             throw new \ModelNotImplemented('Model file not found: ' . $file);
         }
 
-        $DI = DependencyInjector::getInstance();
-
+        $MVCzitto = DependencyInjector::getInstance();
         return include $file;
 
     }
-
 
 }
