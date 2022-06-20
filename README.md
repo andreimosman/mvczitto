@@ -139,3 +139,34 @@ It executes the snippet located at `app/models/users/read.php`.
 
 `app/index.php` contains the entry point of the application and the dependency injector.
 
+### File System CLI Scripts
+
+In the same way `controllers` and `models` works, you can create CLI commands, accessible through `./app/cli`.
+
+A few dummy examples where added to app:
+
+```
+app/console
+└── backup
+    ├── database.help
+    ├── database.php
+    └── uploaded-files.php
+```
+
+#### Usage:
+
+```
+$ ./cli
+
+No command specified.
+
+Usage:
+
+    ./cli <command> [<parameters>]
+
+
+Available commands:
+
+    backup/database
+    backup/uploaded-files
+```
