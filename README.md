@@ -4,8 +4,6 @@
 
 MVCzitto is a framework for PHP that allows you to build web applications in a simple and easy way.
 
-**A FRAMEWORK TO PEOPLE THAT DOES NOT LIKE FRAMEWORKS**
-
 Instead of traditional OO Based MVC, we decided to implement MVC using File System Routing. 
 
 The idea behing this is to write code using PHP as pure as possible, but providing some patterns and organization.
