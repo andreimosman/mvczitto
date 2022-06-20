@@ -1,0 +1,7 @@
+The contents of this file will be shown if the script with the same name 
+throws a MVCzitto\Application\ConsoleApplicationUsageException
+
+You can use this part to specity the list of commands that are available 
+to the console application.
+
+=)
