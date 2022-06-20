@@ -2,6 +2,8 @@
 composer-setup.php
 composer.phar
 
+docker-dev-environment/writable
+
 #### MacOS
 # General
 .DS_Store
